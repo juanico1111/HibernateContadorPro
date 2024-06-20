@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+    Este archivo de configuración define el contexto de la aplicación web. 
+    En este caso, especifica que la aplicación estará disponible en el contexto '/ContadorProHibernate'.
+    El contexto path es utilizado por el servidor de aplicaciones para identificar y mapear esta aplicación web.
+-->
+
+<Context path="/ContadorProHibernate"/>

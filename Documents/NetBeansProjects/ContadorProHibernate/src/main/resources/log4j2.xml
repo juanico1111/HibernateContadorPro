@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" monitorInterval="30">
+    <!-- Configuración global de la aplicación -->
+    <Properties>
+        <!-- Propiedades reutilizables -->
+        <Property name="log.pattern">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Property>
+        <!-- Patrón de formato de registro -->
+        <Property name="console.target">SYSTEM_OUT</Property>
+        <!-- Destino de la salida del log a la consola -->
+        <Property name="log.fileName">logs/app.log</Property>
+        <!-- Nombre del archivo de registro -->
+        <Property name="log.filePattern">logs/app-%d{yyyy-MM-dd}.log.gz</Property>
+        <!-- Patrón de nombres de archivos de registro rodantes -->
+        <Property name="log.level.root">info</Property>
+        <!-- Nivel de log para el registro raíz -->
+        <Property name="log.level.hibernate.SQL">info</Property>
+        <!-- Nivel de log para los registros de SQL de Hibernate -->
+        <Property name="log.level.hibernate.BasicBinder">info</Property>
+        <!-- Nivel de log para los registros de enlace básico de Hibernate -->
+    </Properties>
+
+    <!-- Configuración de los appenders (destinos de los logs) -->
+    <Appenders>
+        <!-- Appender para la consola -->
+        <Console name="Console" target="${console.target}">
+            <PatternLayout pattern="${log.pattern}" />
+            <!-- Define el patrón de formato para los logs -->
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!-- Filtra los logs basado en el nivel de log (DEBUG en este caso) -->
+        </Console>
+        <!-- Appender para archivos rodantes -->
+        <RollingFile name="File" fileName="${log.fileName}" filePattern="${log.filePattern}">
+            <PatternLayout pattern="${log.pattern}" />
+            <!-- Define el patrón de formato para los logs -->
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <!-- Política de activación basada en tiempo -->
+                <SizeBasedTriggeringPolicy size="10MB"/>
+                <!-- Política de activación basada en tamaño -->
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            <!-- Estrategia de rollover por defecto -->
+        </RollingFile>
+    </Appenders>
+
+    <!-- Configuración de los loggers -->
+    <Loggers>
+        <!-- Logger específico para los logs de SQL de Hibernate -->
+        <Logger name="org.hibernate.SQL" level="${log.level.hibernate.SQL}" additivity="false">
+            <AppenderRef ref="File"/>
+            <!-- Referencia al appender File para los logs de SQL -->
+        </Logger>
+        <!-- Logger específico para los logs de BasicBinder de Hibernate -->
+        <Logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="${log.level.hibernate.BasicBinder}" additivity="false">
+            <AppenderRef ref="File"/>
+            <!-- Referencia al appender File para los logs de BasicBinder -->
+        </Logger>
+        <!-- Logger raíz -->
+        <Root level="${log.level.root}">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+            <!-- Referencias a los appenders Console y File para el logger raíz -->
+        </Root>
+    </Loggers>
+</Configuration>
